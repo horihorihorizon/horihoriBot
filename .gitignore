@@ -1,0 +1,3 @@
+launcher/*
+!launcher/0_lancher_sample.bat
+node_modules/

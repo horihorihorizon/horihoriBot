@@ -1,0 +1,14 @@
+{
+    "name": "horihoribot",
+    "version": "1.0.0",
+    "description": "minecraft bot using mineflayer.",
+    "dependencies": {
+        "mineflayer": "git://github.com/horihorihorizon/mineflayer.git"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/horihorihorizon/horihoriBot.git"
+      },
+    "license": "MIT"
+    
+}
