@@ -1,4 +1,5 @@
 var mineflayer = require('mineflayer');
+var Loop_Proc = require("./src/Loop_Proc");
 
 regEventAndStart();
 
@@ -21,13 +22,21 @@ function regEventAndStart(){
 
   bot.on('end', function(){
     console_out("[bot:end]");
+    Loop_Proc1.stop;
     setTimeout(function(){regEventAndStart();},10000);
   });
 
   process.stdin.setEncoding('utf-8');
   process.stdin.on('data', function (stdin_txt){
     bot.chat(stdin_txt);
-});
+  });
+
+  bot.on('connect', function(){
+    console_out("[bot:connect]");
+    Loop_Proc1 = new Loop_Proc(bot);
+    Loop_Proc1.Start(1000);
+  });
+
 }
 
 function console_out(text){
