@@ -1,5 +1,8 @@
+var fs = require('fs');
+
 module.exports = function(bot) {
     this.bot = bot;
+    this.callfirst = true;
 
     bot.on('message', function(jmes){
         try{
@@ -25,6 +28,21 @@ module.exports = function(bot) {
             + ("0" + now.getSeconds()).slice(-2) 
             + "] ";
         console.log(header + text);
+        logfile_out(header + text);
+    }
+
+    function logfile_out(text){
+        if(this.callfirst){
+            now = new Date();
+            date = "["
+                + now.getFullYear() + ":"
+                + ("0" + now.getMonth() + 1).slice(-2) + ":"
+                + ("0" + now.getDate()).slice(-2)
+                + "] ";
+            fs.appendFile('../log/chat.log', " ---------- " + date + " ---------- \r\n", 'UTF-8', function(){});
+            this.callfirst = false;
+        }
+        fs.appendFile('../log/chat.log', text + "\r\n", 'UTF-8', function(){});
     }
 
 }
