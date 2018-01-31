@@ -12,6 +12,7 @@ function regEventAndStart(){
   });
 
   require('./src/Chat_Proc')(bot);
+  require('./src/Command')(bot);
 
   bot.on('end', function(){
     bot.console_out("[bot:end]");

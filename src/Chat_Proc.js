@@ -16,7 +16,8 @@ module.exports = function(bot) {
     //標準入力をチャットに送信する
     process.stdin.setEncoding('utf-8');
     process.stdin.on('data', function (stdin_txt){
-        bot.chat(stdin_txt);
+        if(m = stdin_txt.match(/-(.*)/))  bot.command_det(m[1]);
+        else    bot.chat(stdin_txt);
     });
 
     //現在時刻を付けて標準出力に流す
