@@ -18,6 +18,9 @@ module.exports = function(bot) {
             bot.setControlState("forward",true);
             setTimeout(function(){bot.setControlState("forward", false);},command[1]);
         }
+        else if(command[0]=="返事"){
+            setTimeout(function(){bot.chat("はい");},500);
+        }
     }
 
 }

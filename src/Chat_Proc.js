@@ -9,6 +9,9 @@ module.exports = function(bot) {
         var text = "";
         jmes.extra.forEach(function(v, i, a){text += v.text;});
         bot.console_out(text);
+        if((m = text.match(/^\[.*?\]<(.*?)> ほりほり (.*)/)) ||
+           (m = text.match(/(.*?) whispers: ほりほり (.*)/)))
+           bot.command_det(m[2]);
         }
         catch(e){}
     });
