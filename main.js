@@ -10,9 +10,11 @@ function regEventAndStart(){
               username: process.argv[4],
               password: process.argv[5]
   });
+  var username = process.argv[6];
 
   require('./src/Chat_Proc')(bot);
   require('./src/Command')(bot);
+  require('./src/VillageMonitor')(bot);
 
   bot.on('end', function(){
     bot.console_out("[bot:end]");
@@ -24,6 +26,14 @@ function regEventAndStart(){
     bot.console_out("[bot:connect]");
     Loop_Proc1 = new Loop_Proc(bot);
     Loop_Proc1.Start(1000);
+    bot.VillageMonitor.init(username);
   });
 
+  bot.on('entityMoved', function(entity){
+    if(entity.type=="mob")  bot.VillageMonitor.EntityCheck(entity);
+  });
+
+  bot.on('entitySpawn', function(entity){
+    if(entity.type=="mob")  bot.VillageMonitor.SpawnCounter(entity);
+  });
 }

@@ -21,6 +21,9 @@ module.exports = function(bot) {
         else if(command[0]=="返事"){
             setTimeout(function(){bot.chat("はい");},500);
         }
+        else if(command[0]=="生産状況"){
+            bot.VillageMonitor.Report();
+        }
     }
 
 }
