@@ -6,6 +6,7 @@ module.exports = function(bot) {
     var Villager = {};
     var IronGolem = {};
     var StartDate = {};
+    var nowtps = 20;
 
     const SENS_DIST = 30;   // mobの数を数える最大範囲
     const DELETE_TIME = 10; // 動かないmobを除外するまでの時間
@@ -14,6 +15,7 @@ module.exports = function(bot) {
         if(name != "")  username = name;
         StartDate = new Date();
         logfile_out();
+        tps_update(true);
     }
 
     // 一定範囲でゴーレムがスポーン時に、その時の村人の数やTPSと一緒に記録
@@ -23,10 +25,8 @@ module.exports = function(bot) {
             if (entity.mobType=="Iron golem"){
                 IronGolem[Object.keys(IronGolem).length] = new Date();
                 IronGolem[Object.keys(IronGolem).length-1].villagerNom = Object.keys(Villager).length;
-                bot.get_tps(function(tps1m,tps5m,tps15m){
-                    IronGolem[Object.keys(IronGolem).length-1].tps = tps1m;
-                    logfile_out("Spawn");
-                });              
+                IronGolem[Object.keys(IronGolem).length-1].tps = nowtps;
+                logfile_out("Spawn");
             }
         }
     }
@@ -70,7 +70,19 @@ module.exports = function(bot) {
         var Villager_Number = Object.keys(Villager).length
         var IronGolem_Number = Object.keys(IronGolem).length
 
-        bot.chat("ゴーレムSpawn数："+ Golem_1h_Cnt +"体/直近1h、"+IronGolem_Number+"体/積算"+Time_Sum+"h、1Tick平均：1/"+ tick_per_spawn +"体、村人生存数：" + Villager_Number);
+        //bot.chat("ゴーレムSpawn数："+ Golem_1h_Cnt +"体/直近1h、"+IronGolem_Number+"体/積算"+Time_Sum+"h、1Tick平均：1/"+ tick_per_spawn +"体、村人生存数：" + Villager_Number);
+        bot.chat("ゴーレムSpawn数："+ Golem_1h_Cnt +"体/直近1h、"+IronGolem_Number+"体/積算"+Time_Sum+"h、村人生存数：" + Villager_Number);
+        setTimeout(function(){report_out();},300);
+    }
+
+    function report_out(){
+        try {
+            var readdata = fs.readFileSync("../chat_template/chat_"+username+".txt", 'UTF-8');
+        }
+        catch(err){
+            return;
+        }
+        if(readdata!="") bot.chat(readdata);
     }
 
     // CSVに出力する
@@ -97,6 +109,24 @@ module.exports = function(bot) {
                     + ("0" + lastest_spawn_golem.getMinutes()).slice(-2) + ":" 
                     + ("0" + lastest_spawn_golem.getSeconds()).slice(-2); 
             fs.appendFile(filename, time + ",1," + lastest_spawn_golem.villagerNom + "," + lastest_spawn_golem.tps + "\r\n", 'UTF-8', function(){});             
+        }
+    }
+
+    function tps_update(enable){
+        if(enable){
+            setTimeout(function(){
+                bot.get_tps(function(tps1m,tps5m,tps15m){
+                    nowtps = tps1m;
+                });
+            },5000);
+            var func = setInterval(function(){
+                bot.get_tps(function(tps1m,tps5m,tps15m){
+                    nowtps = tps1m;
+                });
+            },60000);
+        }
+        else{
+            clearInterval(func);
         }
     }
 

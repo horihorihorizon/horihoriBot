@@ -3,3 +3,5 @@ launcher/*
 node_modules/
 log/*
 !log/.gitkeep
+chat_template/*
+!chat_template/README.md

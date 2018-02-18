@@ -10,14 +10,17 @@ module.exports = function(bot) {
         try{
             var text = "";
             jmes.extra.forEach(function(v, i, a){text += v.text;});
-            bot.console_out(text);
             if((m = text.match(/^\[.*?\]<(.*?)> ほりほり (.*)/)) ||
             (m = text.match(/(.*?) whispers: ほりほり (.*)/))){
-                    bot.command_det(m[2]);
+                bot.console_out(text);
+                bot.command_det(m[2]);
             }
             else if(m = text.match(/^TPS from last 1m, 5m, 15m: (.*),(.*),(.*)/)){
                 tps_callback(m[1],m[2],m[3]);
                 tps_callback = {};
+            }
+            else{
+                bot.console_out(text);
             }
         }
         catch(e){}
@@ -39,7 +42,7 @@ module.exports = function(bot) {
             + ("0" + now.getSeconds()).slice(-2) 
             + "] ";
         console.log(header + text);
-        logfile_out(header + text);
+        //logfile_out(header + text);
     }
 
     this.bot.get_tps = function get_tps(callback){

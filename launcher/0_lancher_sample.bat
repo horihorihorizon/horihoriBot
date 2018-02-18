@@ -1,2 +1,2 @@
-node ../main.js HOST PORT EMAIL PASS
+node ../main.js HOST PORT EMAIL PASS USERNAME_OPT
 pause
