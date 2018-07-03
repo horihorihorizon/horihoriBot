@@ -4,6 +4,9 @@ const TelegramBot = require('node-telegram-bot-api');
 module.exports = function(bot, telegram) {
     this.bot = bot;
     this.callfirst = true;
+    this.telegramParam = {
+        first : true,
+    }
 
     var tps_callback = {};
     var telbot;
@@ -28,7 +31,7 @@ module.exports = function(bot, telegram) {
             else{
                 bot.console_out(text);
             }
-            if(telbot) telbot.sendMessage(telegram.chatid, `${text}`);
+            telegramSend(text);
         }
         catch(e){}
     });
@@ -78,4 +81,20 @@ module.exports = function(bot, telegram) {
         fs.appendFile('../log/chat.log', text + "\r\n", 'UTF-8', function(){});
     }
 
+    function telegramSend(text){
+        if(telbot){
+            // ログインメッセージを転送しない
+            if(this.telegramParam.first == true){
+                if(text == "================") this.telegramParam.first = false;
+                return;
+            }
+            // 不要なメッセージを転送しない
+            if(m = text.match(/.*が.*ore.*を.*個発見しました/));
+            else if(m = text.match(/バックアップしています/));
+            else if(m = text.match(/Complete./));
+            else{
+                telbot.sendMessage(telegram.chatid, `${text}`);
+            }
+        }
+    }
 }
