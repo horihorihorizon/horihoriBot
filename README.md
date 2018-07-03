@@ -9,8 +9,9 @@ cd horihoriBot
 npm install
 
 ## 使用法
-node main.js "host" "port" "email" "password" "username"  
-usernameは省略可。（オプション機能で使用）minecraftのユーザー名である必要はありません。  
+node main.js "host" "port" "email" "password" "username" "TelegramToken" "TelegramChatID"
+usernameは省略可。（オプション機能で使用）minecraftのユーザー名である必要はありません。 
+TelegramToken,TelegramChatIDは省略可。（オプション機能で使用）
 /lancher/ ディレクトリにバッチファイルのサンプルがあるので書き換えて使用します。  
 
 ## ライセンス

@@ -1,10 +1,16 @@
 var fs = require('fs');
+const TelegramBot = require('node-telegram-bot-api');
 
-module.exports = function(bot) {
+module.exports = function(bot, telegram) {
     this.bot = bot;
     this.callfirst = true;
 
     var tps_callback = {};
+    var telbot;
+
+    if(typeof telegram.token != "undefined"){
+        telbot = new TelegramBot(telegram.token, { polling: true });
+    }
 
     bot.on('message', function(jmes){
         try{
@@ -22,6 +28,7 @@ module.exports = function(bot) {
             else{
                 bot.console_out(text);
             }
+            if(telbot) telbot.sendMessage(telegram.chatid, `${text}`);
         }
         catch(e){}
     });
@@ -32,6 +39,13 @@ module.exports = function(bot) {
         if(m = stdin_txt.match(/-(.*)/))  bot.command_det(m[1]);
         else    bot.chat(stdin_txt);
     });
+
+    if(telbot){
+        telbot.on('message', (message) => {
+            const { text } = message;
+            bot.chat(text);
+        });
+    }
 
     //現在時刻を付けて標準出力に流す
     this.bot.console_out = function console_out(text){

@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "minecraft bot using mineflayer.",
     "dependencies": {
-        "mineflayer": "git://github.com/horihorihorizon/mineflayer.git"
+        "mineflayer": "git://github.com/horihorihorizon/mineflayer.git",
+        "node-telegram-bot-api": "^0.30.0"
     },
     "repository": {
         "type": "git",
