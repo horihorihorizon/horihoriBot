@@ -18,6 +18,12 @@ module.exports = function(bot) {
             bot.setControlState("forward",true);
             setTimeout(function(){bot.setControlState("forward", false);},command[1]);
         }
+        else if(command[0]=="jumpf"){
+            bot.setControlState("forward",true);
+            bot.setControlState("jump",true);
+            setTimeout(function(){bot.setControlState("forward", false);},command[1]);
+            setTimeout(function(){bot.setControlState("jump", false);},200);
+        }
         /*
         else if(command[0]=="返事"){
             setTimeout(function(){bot.chat("はい");},500);
