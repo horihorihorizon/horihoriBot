@@ -1,6 +1,7 @@
 var mineflayer = require('mineflayer');
 var Loop_Proc = require("./src/Loop_Proc");
 var TelegramBot = require('node-telegram-bot-api');
+var Vec3 = require('vec3').Vec3;
 
 regTelegram();
 regEventAndStart();
@@ -33,6 +34,16 @@ function regEventAndStart(){
 
   bot.on('entityMoved', function(entity){
 //    if(entity.type=="mob")  bot.VillageMonitor.EntityCheck(entity);
+      if(entity.type == "player"){
+        var dst = bot.entity.position.distanceTo(entity.position);
+        if(dst < 0.8){
+          var mypos = new Vec3(bot.entity.position.x, 0, bot.entity.position.z);
+          var yourpos = new Vec3(entity.position.x, 0, entity.position.z);
+          mypos.subtract(yourpos);
+          mypos = mypos.scaled(60);
+          bot.entity.velocity.add(mypos);
+        }
+      }
   });
 
   bot.on('entitySpawn', function(entity){
@@ -53,7 +64,7 @@ function regTelegram(){
   if(typeof telegram.token != "undefined"){
     telegram.enable = true;
     telbot = new TelegramBot(telegram.token, { polling: true });
-  }
+  
 
   telbot.sendMcChat = function sendMcChat(text){
 
@@ -68,12 +79,15 @@ function regTelegram(){
       if(m = text.match(/.*が.*ore.*を.*個発見しました/));
       else if(m = text.match(/バックアップしています/));
       else if(m = text.match(/Complete./));
+      else if(m = text.match(/\[Japanize].*/));
       else{
           telbot.sendMessage(telegram.chatid, `${text}`);
       }
     }
   }
 
+  }
+  
   if(telegram.enable){
     telbot.on('message', (message) => {
         const { text } = message;
